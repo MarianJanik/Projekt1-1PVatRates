@@ -4,10 +4,10 @@ public class VatState {
     private String countryAbbreviation;
     private String country;
     private int fullVat;
-    private int reducedVat;
+    private double reducedVat;
     private boolean specialVat;
 
-    public VatState(String countryAbbreviation, String country, int fullVat, int reducedVat, boolean specialVat) {
+    public VatState(String countryAbbreviation, String country, int fullVat, double reducedVat, boolean specialVat) {
         this.countryAbbreviation = countryAbbreviation;
         this.country = country;
         this.fullVat = fullVat;
@@ -39,11 +39,11 @@ public class VatState {
         this.fullVat = fullVat;
     }
 
-    public int getReducedVat() {
+    public double getReducedVat() {
         return reducedVat;
     }
 
-    public void setReducedVat(int reducedVat) {
+    public void setReducedVat(double reducedVat) {
         this.reducedVat = reducedVat;
     }
 
@@ -61,4 +61,9 @@ public class VatState {
         return text;
     }
 
+    public String getInfoVat2(){
+        String text;
+        text = this.country + " (" + this.countryAbbreviation + "): " + this.fullVat + " %, " + this.reducedVat;
+        return text;
+    }
 }

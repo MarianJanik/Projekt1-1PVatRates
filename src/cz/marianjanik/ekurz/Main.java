@@ -1,33 +1,60 @@
 package cz.marianjanik.ekurz;
 
+import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        VatStateList exampleList = new VatStateList();
+    public static void main(String[] args) throws FileNotFoundException {
+        final String FILE1 = "vat-eu.csv";
+        final int VAT = 20;
+        final String FILE2 = "vat-over-" + VAT + ".txt";
 
-        VatState record1 = new VatState("AT","Austria",20,10,true);
-        VatState record2 = new VatState("BE","Belgium",21,12,true);
-        VatState record3 = new VatState("BG","Bulgaria",20,9,false);
-        VatState record4 = new VatState("CY","Cyprus",19,9,false);
-        VatState record5 = new VatState("CZ","Czech Republic",21,15,false);
+        VatStateList vatStateList;
 
-        exampleList.addState(record1);
-        exampleList.addState(record2);
-        exampleList.addState(record3);
-        exampleList.addState(record4);
-        exampleList.addState(record5);
+        vatStateList = VatStateList.importFromTextFile(FILE1);
 
         System.out.println("\n\n----------------------------------1. Seznam všech států:");
-        System.out.println(exampleList.getAllInfoVat());
+        System.out.println(vatStateList.getAllInfoVat2());
 
         System.out.println("\n\n----------------------------------2. Seznam států, kde VAT>20% a nepoužívají speciální sazbu daně:");
-        System.out.println(exampleList.getAllInfoVat(19));
+        System.out.println(vatStateList.getAllInfoVat(VAT));
 
-        System.out.println("\n\n----------------------------------3. Výpis seřazen sestupně dle VAT: ");
-        System.out.println(exampleList.getAllInfoVatSorted());
+        System.out.println("\n\n----------------------------------3. Výpis (ad 1.) seřazen sestupně dle VAT: ");
+        System.out.println((vatStateList.getAllInfoVatSorted()).getAllInfoVat());
 
+        System.out.println("\n\n----------------------------------4. Výpis (ad 2.) seřazen sestupně dle VAT: ");
+        System.out.println((vatStateList.getAllInfoVatSorted()).getAllInfoVat(VAT));
 
+        System.out.println("\n\n----------------------------------5. Výpis (ad 2.) byl uložen do souboru :" + FILE2 + ".");
+        VatStateList.exportToFile(FILE2, (vatStateList.getAllInfoVatSorted()).getAllInfoVat(VAT));
+
+        System.out.println("\n\n----------------------------------6. Uživatel zadává z klávesnice sazbu: ");
+        enterFromKeyboard(vatStateList);
+    }
+
+    private static void enterFromKeyboard(VatStateList vatStateList) throws FileNotFoundException {
+    String file3;
+    int repeat = 1;
+        boolean control;
+        while (repeat == 1){
+            Scanner scanner = new Scanner(System.in);
+            control = false;
+            while (control==false){
+                System.out.print("Zadej sazbu VAT (kladné celé číslo): ");
+                double vat2 = Double.valueOf(scanner.nextLine());
+                if (vat2>=0){
+                    file3 = "vat-over-" + vat2 + ".txt";
+                    control = true;
+                    System.out.println((vatStateList.getAllInfoVatSorted()).getAllInfoVat(vat2));
+                    VatStateList.exportToFile(file3,(vatStateList.getAllInfoVatSorted()).getAllInfoVat(vat2));
+                }else {
+                    System.out.println("\n\nNebylo zadáno kladné číslo. Bylo zadáno" + vat2 + ". Opakuj zadání.\n\n");
+                }
+            }
+            System.out.print("\n\nChceš zadat jinou hodnotu VAT? (1-ano/0-ne): ");
+            repeat = Integer.valueOf(scanner.nextLine());
+        }
     }
 }
