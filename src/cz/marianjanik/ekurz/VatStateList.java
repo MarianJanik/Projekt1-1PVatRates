@@ -4,12 +4,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class VatStateList {
+public class VatStateList{
     List<VatState> listOfStates = new ArrayList<>();
 
     public void addState(VatState addState){
@@ -25,18 +26,48 @@ public class VatStateList {
     }
 
 
-    public static VatStateList importFromTextFile(String fileName) throws FileNotFoundException {
+    public static VatStateList importFromTextFile(String fileName)
+            throws FileNotFoundException, VatStateException, NumberFormatException, ArrayIndexOutOfBoundsException {
         VatStateList summary = new VatStateList();
-
+        int vat1;
+        double vat2;
+        boolean specialVat=false;
+        int abacus = 0;
         try (Scanner scanner = new Scanner(new FileInputStream(fileName))) {
             while (scanner.hasNextLine()) {
+                abacus++;
                 String inputLine = scanner.nextLine();
                 String[] items = inputLine.split("\t");
-                int vat1 = Integer.valueOf(items[2]);
-                double vat2 = Double.valueOf(items[3].replaceFirst(",","."));
-                boolean specialVat = Boolean.valueOf(items[4]);
-                summary.addState(new VatState(items[0],items[1],vat1,vat2,specialVat));
+                try {
+                    vat1 = Integer.valueOf(items[2]);
+                } catch (NumberFormatException e){
+                    throw new NumberFormatException ("Došlo k chybě při čtení ve 3. sloupci \"Základní sazba DPH\" na řádku "
+                            + abacus + ".\nHodnota není číslo. Bylo zadáno: \"" + items[2] + "\".");
+                }
+                try {
+                    vat2 = Double.valueOf(items[3].replaceFirst(",", "."));
+                } catch (NumberFormatException e){
+                    throw new NumberFormatException ("Došlo k chybě při čtení ve 4. sloupci \"Snížená sazba DPH\" na řádku "
+                            + abacus + ", stát: " + items[1] + " (" + items[0] + ")." + "\nHodnota není číslo. Bylo zadáno: \"" + items[3] + "\".");
+                }
+                try {
+                    if (!("false").equals(items[4]) && !("true").equals(items[4])) {
+                        throw new VatStateException("Došlo k chybě při čtení v 5. sloupci \"Speciální sazba DPH\" na řádku "
+                                + abacus + ", stát: " + items[1] + " (" + items[0] + ")." + "\nHodnota \"false\" nebo \"true\" nenalezena. Bylo zadáno: " + items[4] + ".");
+                    } else specialVat = Boolean.valueOf(items[4]);
+                }catch (ArrayIndexOutOfBoundsException e){
+                    throw new ArrayIndexOutOfBoundsException("Došlo k chybě při čtení v 5. sloupci \"Speciální sazba DPH\" na řádku "
+                                + abacus + ", stát: " + items[1] + " (" + items[0] + "). Hodnota nenalezena.");
+                }
+                try {
+                    summary.addState(new VatState(items[0],items[1],vat1,vat2,specialVat));
+                } catch (VatStateException e) {
+                    throw new VatStateException(e.getMessage() + "\nŘádek: " + abacus + ", stát: " + items[1] + " (" + items[0] + ").");
+                }
             }
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("Soubor pro načtení \"" + fileName + "\" nebyl nalezen.");
+
         }
         return summary;
     }
@@ -74,31 +105,44 @@ public class VatStateList {
     public String getAllInfoVat(double vat){
         StringBuilder builder1 = new StringBuilder();
         StringBuilder builder2 = new StringBuilder();
+        DecimalFormat myFormat = new DecimalFormat("#.#");
         for (VatState vatState:this.listOfStates) {
             if ((vatState.getFullVat() > vat) && !vatState.isSpecialVat())
                 builder1.append(vatState.getInfoVat() + "\n");
             else builder2.append(vatState.getCountryAbbreviation() + ", ");
         }
-            String text = builder1.toString()+"===============================\n"
-                    + "Sazba VAT " + vat + " % nebo nižší nebo používají speciální sazbu: " + builder2.toString();
+            String text = builder1 + "===============================\n"
+                    + "Sazba VAT " + myFormat.format(vat) + " % nebo nižší nebo používají speciální sazbu: " + builder2;
         return text;
     }
 
-    public VatStateList getAllInfoVatSorted(){
+    public VatStateList getAllInfoVatSortedAZ(boolean azSort){
         VatStateList sortedList = new VatStateList();
         List<VatState>copyOfList = new ArrayList<>(listOfStates);
-        while (copyOfList.size()>0){
-            int max = 0;
-            VatState index=null;
-            for (VatState vatState: copyOfList) {
-                if (vatState.getFullVat()>max) {
-                    max=vatState.getFullVat();
-                    index = vatState;
-                }
-            }
-            sortedList.addState(index);
-            copyOfList.remove(index);
+        if (!azSort) Collections.sort(copyOfList, new FullVatComparatorZa());
+        else Collections.sort(copyOfList);
+        copyOfList.forEach(n->{sortedList.addState(n);});
+        return sortedList;
+    }
+
+    public VatStateList getSorted(int sort){
+        VatStateList sortedList = new VatStateList();
+        List<VatState>copyOfList = new ArrayList<>(listOfStates);
+        switch (sort){
+            case 1:
+                Collections.sort(copyOfList, new CountryComparatorAz());
+                break;
+            case 2:
+                Collections.sort(copyOfList, new CountryComparatorZa());
+                break;
+            case 3:
+                Collections.sort(copyOfList);
+                break;
+            case 4:
+                Collections.sort(copyOfList, new FullVatComparatorZa());
+                break;
         }
+        copyOfList.forEach(n->{sortedList.addState(n);});
         return sortedList;
     }
 }

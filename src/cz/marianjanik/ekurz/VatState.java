@@ -1,17 +1,22 @@
 package cz.marianjanik.ekurz;
 
-public class VatState {
-    private String countryAbbreviation;
+import java.text.DecimalFormat;
+
+
+public class VatState implements Comparable<VatState>{
+private String countryAbbreviation;
     private String country;
     private int fullVat;
     private double reducedVat;
     private boolean specialVat;
 
-    public VatState(String countryAbbreviation, String country, int fullVat, double reducedVat, boolean specialVat) {
+    DecimalFormat myFormat = new DecimalFormat("#.#");
+
+    public VatState(String countryAbbreviation, String country, int fullVat, double reducedVat, boolean specialVat) throws VatStateException {
         this.countryAbbreviation = countryAbbreviation;
         this.country = country;
-        this.fullVat = fullVat;
-        this.reducedVat = reducedVat;
+        setFullVat(fullVat);
+        setReducedVat(reducedVat);
         this.specialVat = specialVat;
     }
 
@@ -35,16 +40,20 @@ public class VatState {
         return fullVat;
     }
 
-    public void setFullVat(int fullVat) {
-        this.fullVat = fullVat;
+    public void setFullVat(int fullVat) throws VatStateException{
+        if ((fullVat>=0)&&(fullVat<100)) this.fullVat = fullVat;
+        else throw new VatStateException("Zadaná hodnota ve sloupci DPH/VAT \"Plná sazba daně\" je mimo rozsah (rozsah je 0-99%). "
+                + "Bylo zadáno: " + fullVat + " %. ");
     }
 
     public double getReducedVat() {
         return reducedVat;
     }
 
-    public void setReducedVat(double reducedVat) {
-        this.reducedVat = reducedVat;
+    public void setReducedVat(double reducedVat) throws VatStateException {
+        if ((reducedVat>=0)&&(reducedVat<100)) this.reducedVat = reducedVat;
+        else throw new VatStateException("Zadaná hodnota ve sloupci DPH/VAT \"Snížená sazba daně\" je mimo rozsah (rozsah je 0-99%). "
+                + "Bylo zadáno: " + myFormat.format(reducedVat) + " %. ");
     }
 
     public boolean isSpecialVat() {
@@ -63,7 +72,13 @@ public class VatState {
 
     public String getInfoVat2(){
         String text;
-        text = this.country + " (" + this.countryAbbreviation + "): " + this.fullVat + " %, " + this.reducedVat;
+        text = this.country + " (" + this.countryAbbreviation + "): " + this.fullVat + " %, " + myFormat.format(this.reducedVat) + " %, " + specialVat;
         return text;
     }
+
+    @Override
+    public int compareTo(VatState second) {
+        return this.fullVat - second.fullVat;
+    }
+
 }
