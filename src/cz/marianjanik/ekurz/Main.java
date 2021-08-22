@@ -1,7 +1,6 @@
 package cz.marianjanik.ekurz;
 
 import java.io.FileNotFoundException;
-import java.nio.channels.ScatteringByteChannel;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -43,7 +42,7 @@ public class Main {
         System.out.println("\n\n----------------------------------5. Výpis (ad 2.) byl uložen do souboru: " + FILE2 + ".");
 
         try {
-            VatStateList.exportToFile(FILE2, (vatStateList.getAllInfoVatSortedAZ(Settings.getAzSort())).getAllInfoVat(VAT));
+            VatStateList.exportToFile(FILE2,(vatStateList.getAllInfoVatSortedAZ(Settings.getAzSort())).getAllInfoVat(VAT));
 
             System.out.println("\n\n----------------------------------6. Uživatel zadává z klávesnice sazbu: ");
             enterFromKeyboard(vatStateList);
@@ -51,6 +50,10 @@ public class Main {
             System.err.println("Soubor nebylo možné uložit.");
         }
 
+
+        /**
+         * A voluntary task that I use to test how the comparators work.
+         */
         System.out.println("\n\n----------------------------------7. Testování comparátorů (nebylo součásti zadání)");
         System.out.println("\n\n----------------------------------7a. Seřazení podle země vzestupně");
         System.out.println(vatStateList.getSorted(1).getAllInfoVat2());
@@ -63,6 +66,11 @@ public class Main {
     }
 
 
+    /**
+     * The method allows you to re-enter from the keyboard until the user agrees.
+     * @param vatStateList - input list,
+     * @throws FileNotFoundException - exception for trouble saving a file.
+     */
     private static void enterFromKeyboard(VatStateList vatStateList) throws FileNotFoundException {
     boolean repeat = true;
         while (repeat == true){
@@ -72,6 +80,13 @@ public class Main {
             repeat = scanner.nextLine().equals("a");
         }
     }
+
+    /**
+     * The method allows the user to enter from the keyboard and uses reading,
+     * sorting and output to both the screen and the file.
+     * @param vatStateList - input list,
+     * @throws FileNotFoundException - exception for trouble saving a file.
+     */
 
     private static void inputFromKeyboard(VatStateList vatStateList) throws FileNotFoundException {
         String file3;

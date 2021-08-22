@@ -1,5 +1,4 @@
 package cz.marianjanik.ekurz;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,21 +9,50 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The class is used to work through the base class (VatState) with objects that are imported from a file.
+ * Thanks to this class, objects can be added to the list and worked with.
+ * methods for: add to list, remove from list, import from text file (csv), export to text file,
+ * get info for output, methods for sort.
+ */
+
 public class VatStateList{
     List<VatState> listOfStates = new ArrayList<>();
 
+    /**
+     * Write the object to the list.
+     * @param addState - object to add to the list.
+     */
     public void addState(VatState addState){
         listOfStates.add(addState);
     }
 
+    /**
+     * Remove the object from the list.
+     * @param removeState - object to delete from the list.
+     */
     public void removeState (VatState removeState){
         listOfStates.remove(removeState);
     }
 
+    /**
+     * Remove the object from the list.
+     * @param index - index of the object to be deleted from the list.
+     */
     public void removeState (int index){
         listOfStates.remove(index);
     }
 
+    /**
+     * Methods for reading from a text file.
+     * @param fileName - name text file,
+     * @return - a list that was created from a text file.
+     * @throws FileNotFoundException - exception for file existence,
+     * @throws VatStateException - exception for parsing (newly created),
+     * @throws NumberFormatException - exception for improperly entered numbers,
+     * @throws ArrayIndexOutOfBoundsException - exception for non-existent data
+     * in the input file (applies to the last column false / true).
+     */
 
     public static VatStateList importFromTextFile(String fileName)
             throws FileNotFoundException, VatStateException, NumberFormatException, ArrayIndexOutOfBoundsException {
@@ -72,6 +100,11 @@ public class VatStateList{
         return summary;
     }
 
+    /**
+     * Method for writing the list to a text file.
+     * @param filename - the name of output file,
+     * @throws FileNotFoundException - exception for trouble saving a file.
+     */
     public void exportToFile(String filename) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename))) {
             for (VatState vatState : this.listOfStates) {
@@ -80,12 +113,22 @@ public class VatStateList{
         }
     }
 
+    /**
+     * Method for writing text to a text file.
+     * @param filename - the name of output file,
+     * @param text - text for writing,
+     * @throws FileNotFoundException - exception for trouble saving a file.
+     */
     public static void exportToFile(String filename, String text) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename))) {
             writer.println(text);
         }
     }
 
+    /**
+     * Method prepares the text from list for output (screen, file) - according to the project assignment.
+     * @return - prepare text.
+     */
     public String getAllInfoVat(){
         StringBuilder builder = new StringBuilder();
         for (VatState vatState:this.listOfStates) {
@@ -94,6 +137,10 @@ public class VatStateList{
         return builder.toString();
     }
 
+    /**
+     * Method prepares the text from list for output (screen, file) - all information.
+     * @return
+     */
     public String getAllInfoVat2(){
         StringBuilder builder = new StringBuilder();
         for (VatState vatState:this.listOfStates) {
@@ -102,6 +149,11 @@ public class VatStateList{
         return builder.toString();
     }
 
+    /**
+     * Method prepares the text from list for output (screen, file) - according to the project assignment.
+     * @param vat - VAT option from the user,
+     * @return - prepare text.
+     */
     public String getAllInfoVat(double vat){
         StringBuilder builder1 = new StringBuilder();
         StringBuilder builder2 = new StringBuilder();
@@ -116,6 +168,11 @@ public class VatStateList{
         return text;
     }
 
+    /**
+     * A method that allows you to sort data from the list according to VAT in ascending and descending order.
+     * @param azSort - true-ascending sort, false-descending sort,
+     * @return - sorted list.
+     */
     public VatStateList getAllInfoVatSortedAZ(boolean azSort){
         VatStateList sortedList = new VatStateList();
         List<VatState>copyOfList = new ArrayList<>(listOfStates);
@@ -125,6 +182,13 @@ public class VatStateList{
         return sortedList;
     }
 
+    /**
+     * A method that allows you to sort data from the list by VAT in ascending and descending order,
+     * and by country name in ascending and descending order. It mainly uses comparators.
+     * @param sort - number allowing selection:(1.country-ascending,2.country-descending,
+     *             3.basic VAT rate-ascending,4.basic VAT rate-descending,
+     * @return - sorted list.
+     */
     public VatStateList getSorted(int sort){
         VatStateList sortedList = new VatStateList();
         List<VatState>copyOfList = new ArrayList<>(listOfStates);

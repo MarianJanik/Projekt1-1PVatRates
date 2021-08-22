@@ -1,7 +1,7 @@
 package cz.marianjanik.ekurz;
 
 /**
- * Třída nastavuje způsob řazení (AZ_SORT=false - sestupně).
+ * The class sets the sort method (AZ_SORT=false - descending).
  */
 
 public class Settings {

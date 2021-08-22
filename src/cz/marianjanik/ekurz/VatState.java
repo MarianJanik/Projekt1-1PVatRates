@@ -2,6 +2,10 @@ package cz.marianjanik.ekurz;
 
 import java.text.DecimalFormat;
 
+/**
+ * Basic class for project solution. The class solves the basic instance of the objects that are used in the project.
+ * 5 fields, 1 constructor, getters and setters, VatStateExceptions - exceptions for numerical constraints.
+ */
 
 public class VatState implements Comparable<VatState>{
 private String countryAbbreviation;
@@ -12,6 +16,16 @@ private String countryAbbreviation;
 
     DecimalFormat myFormat = new DecimalFormat("#.#");
 
+    /**
+     * constructor
+     * @param countryAbbreviation - abbreviation for state,
+     * @param country - country,
+     * @param fullVat - full percentage of value added tax,
+     * @param reducedVat - reduced percentage of value added tax,
+     * @param specialVat - information on whether the country uses a special VAT rate for some products,
+     * @throws VatStateException - exception for numerical definition of tax from 0 to 100.
+     */
+
     public VatState(String countryAbbreviation, String country, int fullVat, double reducedVat, boolean specialVat) throws VatStateException {
         this.countryAbbreviation = countryAbbreviation;
         this.country = country;
@@ -19,6 +33,10 @@ private String countryAbbreviation;
         setReducedVat(reducedVat);
         this.specialVat = specialVat;
     }
+
+    /**
+     * getters and setters
+     */
 
     public String getCountryAbbreviation() {
         return countryAbbreviation;
@@ -40,6 +58,11 @@ private String countryAbbreviation;
         return fullVat;
     }
 
+    /**
+     * This setter is used in the constructor and sets the basic VAT rate.
+     * @param fullVat - full percentage of value added tax,
+     * @throws VatStateException - exception for numerical definition of tax from 0 to 100.
+     */
     public void setFullVat(int fullVat) throws VatStateException{
         if ((fullVat>=0)&&(fullVat<100)) this.fullVat = fullVat;
         else throw new VatStateException("Zadaná hodnota ve sloupci DPH/VAT \"Plná sazba daně\" je mimo rozsah (rozsah je 0-99%). "
@@ -50,6 +73,11 @@ private String countryAbbreviation;
         return reducedVat;
     }
 
+    /**
+     * This setter is used in the constructor and sets the reduced VAT rate.
+     * @param reducedVat - reduced percentage of value added tax,
+     * @throws VatStateException - exception for numerical definition of tax from 0 to 100.
+     */
     public void setReducedVat(double reducedVat) throws VatStateException {
         if ((reducedVat>=0)&&(reducedVat<100)) this.reducedVat = reducedVat;
         else throw new VatStateException("Zadaná hodnota ve sloupci DPH/VAT \"Snížená sazba daně\" je mimo rozsah (rozsah je 0-99%). "
@@ -64,21 +92,29 @@ private String countryAbbreviation;
         this.specialVat = specialVat;
     }
 
+    /**
+     * Method prepare text for output (screen, file) - according to the project assignment.
+     */
     public String getInfoVat(){
         String text;
         text = this.country + " (" + this.countryAbbreviation + "): " + this.fullVat + " %";
         return text;
     }
 
+    /**
+     * Method prepare text for output (screen, file) - all information.
+     */
     public String getInfoVat2(){
         String text;
         text = this.country + " (" + this.countryAbbreviation + "): " + this.fullVat + " %, " + myFormat.format(this.reducedVat) + " %, " + specialVat;
         return text;
     }
 
+    /**
+     * Method adapted for sorting by basic VAT rate.
+     */
     @Override
     public int compareTo(VatState second) {
         return this.fullVat - second.fullVat;
     }
-
 }
