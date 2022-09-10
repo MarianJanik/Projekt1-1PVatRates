@@ -1,12 +1,8 @@
-### Krátké info ke kurzu v Javě:
-- kurz trval 13 lekcí 1x za týden a začínal v červenci 2021,
-- lekce měla v úterý 3 vyuč. hod. a ve čtvrtek 2-3 hodiny konzultací,
-
-### Krátké info ke projektu:
-- projekt byl vypracován po 6. lekci JAVY (srpen 2021),
-- projekt byl opakováním 6 hodin a podařil se mi naprogramovat bez větších problému,
-- nejvíce mi dal zabrat popis v angličtině, který mi pak lektor připominkoval jako: "je ho příliš moc",
-- nejtěšší v programování byly komparátory a přesné zavedení vyjímek.
+### Krátké info k projektu:
+- projekt byl vypracován po 6. lekci Java Akademie (srpen 2021),
+- projekt byl opakováním 6 hodin a podařil se mi jej naprogramovat bez problému,
+- dal mi zabrat popis v angličtině,
+- v programování byly nejtěžší komparátory a výjímky.
 
 
 
