@@ -3,3 +3,4 @@ JavaNotes/*
 out/*
 .idea/*
 *.iml
+.gitignore
