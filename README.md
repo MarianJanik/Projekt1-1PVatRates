@@ -1,3 +1,15 @@
+### Krátké info ke kurzu v Javě:
+- kurz trval 13 lekcí 1x za týden a začínal v červenci 2021,
+- lekce měla v úterý 3 vyuč. hod. a ve čtvrtek 2-3 hodiny konzultací,
+
+### Krátké info ke projektu:
+- projekt byl vypracován po 6. lekci JAVY (srpen 2021),
+- projekt byl opakováním 6 hodin a podařil se mi naprogramovat bez větších problému,
+- nejvíce mi dal zabrat popis v angličtině, který mi pak lektor připominkoval jako: "je ho příliš moc",
+- nejtěšší v programování byly komparátory a přesné zavedení vyjímek.
+
+
+
 # První projekt — Sazby DPH
 
 Na prvním projektu byste si měli ověřit, že jste zvládli témata prvních šesti lekcí.
@@ -5,6 +17,7 @@ Na prvním projektu byste si měli ověřit, že jste zvládli témata prvních 
 K projektu nebudete mít vzorové řešení.
 
 Vaše řešení byste měli odevzdat v repozitáři, který si pro tento účel vytvoříte.
+
 
 ## Zadání
 
@@ -66,4 +79,3 @@ o	Uprav název výstupního souboru tak, aby reflektoval zadanou sazbu daně.
 
 ## Dotazy?
 Pokud máš k zadání dotazy, nebo narazíš na problém, se kterým si delší dobu nevíte rady, obraťte se na lektora.
-

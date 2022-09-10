@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
  */
 
 public class VatState implements Comparable<VatState>{
-private String countryAbbreviation;
+    private String countryAbbreviation;
     private String country;
     private int fullVat;
     private double reducedVat;
