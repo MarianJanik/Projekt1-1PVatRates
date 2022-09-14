@@ -1,7 +1,7 @@
 ### Krátké info k projektu:
 - projekt byl vypracován po 6. lekci Java Akademie (srpen 2021),
 - projekt byl opakováním 6 hodin a podařil se mi jej naprogramovat bez problému,
-- dal mi zabrat popis v angličtině,
+- novinka pro mne byl popis v angličtině,
 - v programování byly nejtěžší komparátory a výjímky.
 
 
